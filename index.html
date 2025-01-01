@@ -116,14 +116,14 @@
 </head>
 <body>
   <div class="card">
-    <h2>Promotion</h2>
+    <h2>Promotion calculator</h2>
     <p>
       Estimated new customers =
       <span id="estimate">5 - 10</span>
       <select id="timeframe" class="dropdown">
-        <option value="day">per day</option>
-        <option value="week">per week</option>
-        <option value="month">per month</option>
+        <option value="4weeks">within 4 weeks</option>
+        <option value="6weeks">within 6 weeks</option>
+        <option value="8weeks">within 8 weeks</option>
       </select>
     </p>
 
@@ -221,13 +221,12 @@
     const db = firebase.firestore();
 
     // -----------------------
-    // 2. Original Code
+    // 2. Modified Timeframes
     // -----------------------
-    // -- TIMEFRAMES (days multipliers) --
     const timeframes = {
-      day: 1,
-      week: 7,
-      month: 30,
+      "4weeks": 1,
+      "6weeks": 1.5,
+      "8weeks": 2,
     };
 
     // -- PRICE PER FORMAT --
@@ -263,7 +262,7 @@
     // -- STATE --
     let selectedQuantity = 3;
     let selectedFormats = [];
-    let selectedTimeframe = "day";
+    let selectedTimeframe = "4weeks";
 
     // -- Toggle the Additional Earnings Section --
     toggleRevenueBtn.addEventListener("click", () => {
@@ -310,11 +309,14 @@
       ) {
         const minIncome = mealPriceValue * minEstimate;
         const maxIncome = mealPriceValue * maxEstimate;
+        
+        // Extract the numeric part of the timeframe (e.g., "4" from "4weeks")
+        const weeks = selectedTimeframe.replace("weeks", "");
 
         if (totalPrice > 0) {
           revenueOutput.textContent =
-            `You could earn between ${minIncome.toFixed(0)}€ ` +
-            `and ${maxIncome.toFixed(0)}€ after our collaboration.`;
+            `Within ${weeks} weeks, you should earn between ${minIncome.toFixed(0)}€ ` +
+            `and ${maxIncome.toFixed(0)}€ due to our collaboration.`;
         } else {
           revenueOutput.textContent =
             "There is no campaign cost. No calculation needed.";
@@ -353,6 +355,7 @@
             button.classList.add("selected");
           }
         } else {
+          // If "all" is currently selected, remove it before toggling other formats
           if (selectedFormats.includes("all")) {
             selectedFormats = selectedFormats.filter((f) => f !== "all");
             const allBtn = document.querySelector('button[data-format="all"]');
@@ -386,7 +389,7 @@
     updateUI();
 
     // -----------------------
-    // 3. Save Data to Firestore with Email as Doc ID
+    // 3. Save Data to Firestore (with Email as Doc ID)
     // -----------------------
     requestBtn.addEventListener("click", () => {
       // Prompt the user for their email
