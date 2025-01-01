@@ -13,12 +13,18 @@
 
   <style>
     /* Base styling */
-    body {
+    html, body {
+      height: 100%;
+      margin: 0; 
+      padding: 0;
       font-family: Arial, sans-serif;
       background-color: #2c2f38;
       color: white;
+    }
+
+    body {
       padding: 20px;
-      margin: 0; /* Remove default margin for better mobile fit */
+      box-sizing: border-box;
     }
 
     .card {
@@ -139,14 +145,24 @@
     @media (max-width: 600px) {
       body {
         padding: 10px;
+        /* Make sure body can fill up full screen height too */
+        height: auto;
+        min-height: 100%;
       }
 
       .card {
         width: 100%;
-        padding: 15px;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh; /* Fill the entire phone screen */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
       }
 
-      h2 {
+      .card h2 {
         font-size: 1.2rem;
       }
 
