@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promotion Setup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c2f38;
+      color: white;
+      padding: 20px;
+    }
+    .card {
+      max-width: 400px;
+      margin: auto;
+      background-color: #1e2029;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .card h2 {
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #a3a3a3;
+    }
+    .quantity,
+    .format {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    .quantity button,
+    .format button {
+      background-color: #3b3e4a;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .quantity button.selected,
+    .format button.selected {
+      background-color: #008cba;
+    }
+    .format-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .format-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .price button {
+      background-color: #008cba;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    /* Dropdown-like button */
+    .dropdown {
+      background-color: #3b3e4a;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.2s;
+    }
+    .dropdown:hover {
+      background-color: #008cba;
+    }
+    /* Earnings Section (initially hidden) */
+    .revenue-section {
+      margin-top: 15px;
+      background-color: #3b3e4a;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .revenue-section p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .revenue-section input {
+      width: 100%;
+      background-color: #1e2029;
+      color: white;
+      border: 1px solid #008cba;
+      border-radius: 4px;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Promotion</h2>
+    <p>
+      Estimated new customers =
+      <span id="estimate">5 - 10</span>
+      <select id="timeframe" class="dropdown">
+        <!-- Timeframe options -->
+        <option value="within4">within 4 weeks</option>
+        <option value="within6">within 6 weeks</option>
+        <option value="within8">within 8 weeks</option>
+      </select>
+    </p>
+
+    <!-- Number of collaboration Section -->
+    <div>
+      <div class="subtitle">Number of collaboration</div>
+      <div class="quantity">
+        <button data-value="1">1</button>
+        <button data-value="2">2</button>
+        <button data-value="3" class="selected">3</button>
+        <button data-value="4">4</button>
+        <button data-value="5">5</button>
+      </div>
+    </div>
+
+    <!-- Format Section -->
+    <div>
+      <div class="subtitle">Format</div>
+      <div class="format">
+        <div class="format-item">
+          <img
+            src="https://i.ibb.co/WG2Jbtp/Group-8.png"
+            alt="Post Image"
+          />
+          <button data-format="post">POST</button>
+        </div>
+        <div class="format-item">
+          <img
+            src="https://i.ibb.co/BKJvnvn/Group-10.png"
+            alt="Story Image"
+          />
+          <button data-format="story">STORY</button>
+        </div>
+        <div class="format-item">
+          <img
+            src="https://i.ibb.co/B4bS0HZ/Group-11.png"
+            alt="Reels Image"
+          />
+          <button data-format="reels">REELS</button>
+        </div>
+        <div class="format-item">
+          <img
+            src="https://i.ibb.co/CP6RCQ2/Group-12.png"
+            alt="All Image"
+          />
+          <button data-format="all">ALL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign Price -->
+    <div class="price">
+      <span id="price">0€</span>
+      <button id="requestBtn">REQUEST</button>
+    </div>
+
+    <!-- Button to reveal/hide additional earnings section -->
+    <button id="toggleRevenue" class="dropdown">Show potential returns ▾</button>
+
+    <!-- Earnings Calculation Section (hidden by default) -->
+    <div class="revenue-section" id="revenueSection" style="display: none;">
+      <div class="subtitle"></div>
+      <p>Enter your average meal price:</p>
+      <input
+        type="number"
+        id="mealPrice"
+        placeholder="e.g. 25€"
+        min="0"
+        step="1"
+      />
+      <p id="revenueOutput" style="margin-top: 10px;">
+        You will see your potential net amount here.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // 1. Updated multipliers for new timeframes
+    const timeframes = {
+      within4: 1,   // 4 weeks => multiplier 1
+      within6: 1.5, // 6 weeks => multiplier 1.5
+      within8: 2,   // 8 weeks => multiplier 2
+    };
+
+    // 2. Human-readable labels for each timeframe key
+    const timeframeLabels = {
+      within4: "Within 4 weeks",
+      within6: "Within 6 weeks",
+      within8: "Within 8 weeks",
+    };
+
+    // -- PRICE PER FORMAT --
+    const pricePerFormat = {
+      post: 50,
+      story: 70,
+      reels: 90,
+      all: 190,
+    };
+
+    // -- ESTIMATE PER FORMAT [MIN, MAX] --
+    const estimatePerFormat = {
+      post: [5, 10],
+      story: [7, 15],
+      reels: [10, 20],
+      all: [22, 45],
+    };
+
+    // -- ELEMENTS --
+    const quantityButtons = document.querySelectorAll(".quantity button");
+    const formatButtons = document.querySelectorAll(".format button");
+    const estimateDisplay = document.getElementById("estimate");
+    const priceDisplay = document.getElementById("price");
+    const timeframeDropdown = document.getElementById("timeframe");
+    const mealPriceInput = document.getElementById("mealPrice");
+    const revenueOutput = document.getElementById("revenueOutput");
+
+    // Dropdown button & revenue section
+    const toggleRevenueBtn = document.getElementById("toggleRevenue");
+    const revenueSection = document.getElementById("revenueSection");
+
+    // -- STATE --
+    let selectedQuantity = 3;
+    let selectedFormats = [];
+    let selectedTimeframe = "within4"; // default
+
+    // -- Toggle the Additional Earnings Section --
+    toggleRevenueBtn.addEventListener("click", () => {
+      if (revenueSection.style.display === "none") {
+        revenueSection.style.display = "block";
+        toggleRevenueBtn.textContent = "🧮";
+      } else {
+        revenueSection.style.display = "none";
+        toggleRevenueBtn.textContent = "Show potential returns ▾";
+      }
+    });
+
+    // -- UPDATE UI FUNCTION --
+    function updateUI() {
+      const timeframeMultiplier = timeframes[selectedTimeframe];
+      let minEstimate = 0;
+      let maxEstimate = 0;
+      let totalPrice = 0;
+
+      // Sum up estimates & cost for all selected formats
+      selectedFormats.forEach((format) => {
+        const [minE, maxE] = estimatePerFormat[format];
+        minEstimate += minE * selectedQuantity * timeframeMultiplier;
+        maxEstimate += maxE * selectedQuantity * timeframeMultiplier;
+        totalPrice += pricePerFormat[format] * selectedQuantity;
+      });
+
+      // If no format is selected, show 0 - 0
+      if (selectedFormats.length === 0) {
+        estimateDisplay.textContent = "0 - 0";
+        priceDisplay.textContent = "0€";
+      } else {
+        estimateDisplay.textContent = `${minEstimate} - ${maxEstimate}`;
+        priceDisplay.textContent = `${totalPrice}€`;
+      }
+
+      // Convert to integer (no decimals)
+      const mealPriceValue = parseInt(mealPriceInput.value, 10);
+
+      if (
+        revenueSection.style.display === "block" && // Only calculate if shown
+        selectedFormats.length > 0 &&
+        !isNaN(mealPriceValue) &&
+        mealPriceValue > 0
+      ) {
+        // Potential total GROSS income (no subtracting cost)
+        const minIncome = mealPriceValue * minEstimate;
+        const maxIncome = mealPriceValue * maxEstimate;
+
+        if (totalPrice > 0) {
+          // 3. Use timeframeLabels to incorporate the chosen timeframe
+          revenueOutput.textContent =
+            `${timeframeLabels[selectedTimeframe]}, you should earn between ` +
+            `${minIncome.toFixed(0)}€ and ${maxIncome.toFixed(0)}€ due to our collaboration.`;
+        } else {
+          revenueOutput.textContent =
+            "There is no campaign cost. No calculation needed.";
+        }
+      } else if (selectedFormats.length === 0) {
+        revenueOutput.textContent =
+          "Please select at least one format to see your return.";
+      } else {
+        // If the user hasn't entered a valid price or hasn't opened the section
+        revenueOutput.textContent =
+          "Enter a positive average meal price to see your return";
+      }
+    }
+
+    // -- QUANTITY BUTTONS --
+    quantityButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        quantityButtons.forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        selectedQuantity = parseInt(btn.getAttribute("data-value"), 10);
+        updateUI();
+      });
+    });
+
+    // -- FORMAT BUTTONS (multi-select) + "ALL" logic --
+    formatButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const format = button.getAttribute("data-format");
+
+        if (format === "all") {
+          // If "all" is already selected, unselect it
+          if (selectedFormats.includes("all")) {
+            selectedFormats = selectedFormats.filter((f) => f !== "all");
+            button.classList.remove("selected");
+          } else {
+            // Remove all other formats, select ONLY "all"
+            selectedFormats = ["all"];
+            formatButtons.forEach((btn) => btn.classList.remove("selected"));
+            button.classList.add("selected");
+          }
+        } else {
+          // If "all" was selected, remove it
+          if (selectedFormats.includes("all")) {
+            selectedFormats = selectedFormats.filter((f) => f !== "all");
+            const allBtn = document.querySelector('button[data-format="all"]');
+            allBtn.classList.remove("selected");
+          }
+
+          // Toggle the clicked format
+          if (selectedFormats.includes(format)) {
+            selectedFormats = selectedFormats.filter((f) => f !== format);
+            button.classList.remove("selected");
+          } else {
+            selectedFormats.push(format);
+            button.classList.add("selected");
+          }
+        }
+
+        updateUI();
+      });
+    });
+
+    // -- TIMEFRAME DROPDOWN --
+    timeframeDropdown.addEventListener("change", () => {
+      selectedTimeframe = timeframeDropdown.value;
+      updateUI();
+    });
+
+    // -- AVERAGE MEAL PRICE INPUT (for net/gross amount) --
+    mealPriceInput.addEventListener("input", () => {
+      updateUI();
+    });
+
+    // -- INITIALIZE UI --
+    updateUI();
+  </script>
+</body>
+</html>
