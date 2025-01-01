@@ -43,8 +43,10 @@
     .quantity,
     .format {
       display: flex;
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
       gap: 10px;
       margin: 15px 0;
+      justify-content: space-between;
     }
 
     .quantity button,
@@ -56,6 +58,8 @@
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.2s;
+      min-width: 60px; /* Keep a consistent button width */
+      text-align: center;
     }
 
     .quantity button.selected,
@@ -131,10 +135,7 @@
       box-sizing: border-box;
     }
 
-    /* 
-      MEDIA QUERIES FOR MOBILE 
-      Adjust styling for screens at or below 600px width
-    */
+    /* MEDIA QUERIES FOR MOBILE */
     @media (max-width: 600px) {
       body {
         padding: 10px;
@@ -153,16 +154,10 @@
         font-size: 12px;
       }
 
-      .quantity,
-      .format {
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        justify-content: center;
-      }
-
+      /* Ensure buttons remain a consistent width on mobile */
       .quantity button,
       .format button {
-        flex: 1 1 80px; /* Let buttons shrink or grow */
-        margin: 5px 2px;
+        min-width: 60px;
         padding: 8px;
       }
 
@@ -194,7 +189,7 @@
 </head>
 <body>
   <div class="card">
-    <h2>Promotion calculator</h2>
+    <h2>Promotion</h2>
     <p>
       Estimated new customers =
       <span id="estimate">5 - 10</span>
