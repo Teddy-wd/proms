@@ -300,7 +300,7 @@
         priceDisplay.textContent = `${totalPrice}€`;
       }
 
-      // -- Gross revenue logic (from prior code snippet) --
+      // -- Gross revenue logic --
       const mealPriceValue = parseInt(mealPriceInput.value, 10);
       if (
         revenueSection.style.display === "block" && 
@@ -377,7 +377,7 @@
       updateUI();
     });
 
-    // -- AVERAGE MEAL PRICE INPUT (for net/gross amount) --
+    // -- AVERAGE MEAL PRICE INPUT --
     mealPriceInput.addEventListener("input", () => {
       updateUI();
     });
@@ -386,23 +386,28 @@
     updateUI();
 
     // -----------------------
-    // 3. Save Data to Firestore (Example)
+    // 3. Save Data to Firestore with Email as Doc ID
     // -----------------------
     requestBtn.addEventListener("click", () => {
-      // Example: gather data we want to store
+      // Prompt the user for their email
+      const userEmail = prompt("Please enter your email address:");
+      if (!userEmail) return; // If user canceled or left empty, do nothing.
+
+      // Gather data we want to store
       const dataToSave = {
         quantity: selectedQuantity,
         formats: selectedFormats,
         timeframe: selectedTimeframe,
         mealPrice: parseInt(mealPriceInput.value, 10) || 0,
-        createdAt: new Date().toISOString(), // or serverTimestamp
+        createdAt: new Date().toISOString(), // or serverTimestamp if desired
       };
 
-      // Save to a collection named "promotions" (adjust name as needed)
+      // Use doc(userEmail) to create (or overwrite) a doc named by the email
       db.collection("promotions")
-        .add(dataToSave)
-        .then((docRef) => {
-          alert(`Request saved! Document ID: ${docRef.id}`);
+        .doc(userEmail)
+        .set(dataToSave)
+        .then(() => {
+          alert(`Request saved under email: ${userEmail}`);
         })
         .catch((error) => {
           console.error("Error adding document: ", error);
