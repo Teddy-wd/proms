@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Promotion Setup</title>
+
+  <!-- FIREBASE SCRIPTS -->
+  <!-- Use the version that matches your Firebase config. This example uses v9+ (modular). -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,7 +79,6 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    /* Dropdown-like button */
     .dropdown {
       background-color: #3b3e4a;
       color: white;
@@ -87,7 +92,6 @@
     .dropdown:hover {
       background-color: #008cba;
     }
-    /* Earnings Section (initially hidden) */
     .revenue-section {
       margin-top: 15px;
       background-color: #3b3e4a;
@@ -112,21 +116,20 @@
 </head>
 <body>
   <div class="card">
-    <h2>Promotion V2</h2>
+    <h2>Promotion</h2>
     <p>
       Estimated new customers =
       <span id="estimate">5 - 10</span>
       <select id="timeframe" class="dropdown">
-        <!-- Timeframe options -->
-        <option value="within4">within 4 weeks</option>
-        <option value="within6">within 6 weeks</option>
-        <option value="within8">within 8 weeks</option>
+        <option value="day">per day</option>
+        <option value="week">per week</option>
+        <option value="month">per month</option>
       </select>
     </p>
 
-    <!-- Number of collaboration Section -->
+    <!-- Quantity Section -->
     <div>
-      <div class="subtitle">Number of collaboration</div>
+      <div class="subtitle">Quantity</div>
       <div class="quantity">
         <button data-value="1">1</button>
         <button data-value="2">2</button>
@@ -198,18 +201,33 @@
   </div>
 
   <script>
-    // 1. Updated multipliers for new timeframes
-    const timeframes = {
-      within4: 1,   // 4 weeks => multiplier 1
-      within6: 1.5, // 6 weeks => multiplier 1.5
-      within8: 2,   // 8 weeks => multiplier 2
+    // -----------------------
+    // 1. Firebase Config
+    // -----------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpqSiyQ83SdRRm-oj_8lkh29Zlc3irO7k",
+      authDomain: "proms-2951f.firebaseapp.com",
+      projectId: "proms-2951f",
+      storageBucket: "proms-2951f.firebasestorage.app",
+      messagingSenderId: "155057462048",
+      appId: "1:155057462048:web:61f5e6dc1e621a7abf1545",
+      measurementId: "G-JLZ0ZHM268"
     };
 
-    // 2. Human-readable labels for each timeframe key
-    const timeframeLabels = {
-      within4: "Within 4 weeks",
-      within6: "Within 6 weeks",
-      within8: "Within 8 weeks",
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Get a Firestore instance
+    const db = firebase.firestore();
+
+    // -----------------------
+    // 2. Original Code
+    // -----------------------
+    // -- TIMEFRAMES (days multipliers) --
+    const timeframes = {
+      day: 1,
+      week: 7,
+      month: 30,
     };
 
     // -- PRICE PER FORMAT --
@@ -240,11 +258,12 @@
     // Dropdown button & revenue section
     const toggleRevenueBtn = document.getElementById("toggleRevenue");
     const revenueSection = document.getElementById("revenueSection");
+    const requestBtn = document.getElementById("requestBtn");
 
     // -- STATE --
     let selectedQuantity = 3;
     let selectedFormats = [];
-    let selectedTimeframe = "within4"; // default
+    let selectedTimeframe = "day";
 
     // -- Toggle the Additional Earnings Section --
     toggleRevenueBtn.addEventListener("click", () => {
@@ -281,24 +300,21 @@
         priceDisplay.textContent = `${totalPrice}€`;
       }
 
-      // Convert to integer (no decimals)
+      // -- Gross revenue logic (from prior code snippet) --
       const mealPriceValue = parseInt(mealPriceInput.value, 10);
-
       if (
-        revenueSection.style.display === "block" && // Only calculate if shown
+        revenueSection.style.display === "block" && 
         selectedFormats.length > 0 &&
         !isNaN(mealPriceValue) &&
         mealPriceValue > 0
       ) {
-        // Potential total GROSS income (no subtracting cost)
         const minIncome = mealPriceValue * minEstimate;
         const maxIncome = mealPriceValue * maxEstimate;
 
         if (totalPrice > 0) {
-          // 3. Use timeframeLabels to incorporate the chosen timeframe
           revenueOutput.textContent =
-            `${timeframeLabels[selectedTimeframe]}, you should earn between ` +
-            `${minIncome.toFixed(0)}€ and ${maxIncome.toFixed(0)}€ due to our collaboration.`;
+            `You could earn between ${minIncome.toFixed(0)}€ ` +
+            `and ${maxIncome.toFixed(0)}€ after our collaboration.`;
         } else {
           revenueOutput.textContent =
             "There is no campaign cost. No calculation needed.";
@@ -307,7 +323,6 @@
         revenueOutput.textContent =
           "Please select at least one format to see your return.";
       } else {
-        // If the user hasn't entered a valid price or hasn't opened the section
         revenueOutput.textContent =
           "Enter a positive average meal price to see your return";
       }
@@ -329,25 +344,20 @@
         const format = button.getAttribute("data-format");
 
         if (format === "all") {
-          // If "all" is already selected, unselect it
           if (selectedFormats.includes("all")) {
             selectedFormats = selectedFormats.filter((f) => f !== "all");
             button.classList.remove("selected");
           } else {
-            // Remove all other formats, select ONLY "all"
             selectedFormats = ["all"];
             formatButtons.forEach((btn) => btn.classList.remove("selected"));
             button.classList.add("selected");
           }
         } else {
-          // If "all" was selected, remove it
           if (selectedFormats.includes("all")) {
             selectedFormats = selectedFormats.filter((f) => f !== "all");
             const allBtn = document.querySelector('button[data-format="all"]');
             allBtn.classList.remove("selected");
           }
-
-          // Toggle the clicked format
           if (selectedFormats.includes(format)) {
             selectedFormats = selectedFormats.filter((f) => f !== format);
             button.classList.remove("selected");
@@ -374,6 +384,30 @@
 
     // -- INITIALIZE UI --
     updateUI();
+
+    // -----------------------
+    // 3. Save Data to Firestore (Example)
+    // -----------------------
+    requestBtn.addEventListener("click", () => {
+      // Example: gather data we want to store
+      const dataToSave = {
+        quantity: selectedQuantity,
+        formats: selectedFormats,
+        timeframe: selectedTimeframe,
+        mealPrice: parseInt(mealPriceInput.value, 10) || 0,
+        createdAt: new Date().toISOString(), // or serverTimestamp
+      };
+
+      // Save to a collection named "promotions" (adjust name as needed)
+      db.collection("promotions")
+        .add(dataToSave)
+        .then((docRef) => {
+          alert(`Request saved! Document ID: ${docRef.id}`);
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error);
+        });
+    });
   </script>
 </body>
 </html>
