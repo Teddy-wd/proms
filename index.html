@@ -13,9 +13,10 @@
 
   <style>
     /* Base styling */
-    html, body {
+    html,
+    body {
       height: 100%;
-      margin: 0; 
+      margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
       background-color: #2c2f38;
@@ -87,11 +88,18 @@
       border-radius: 4px;
     }
 
+    /* The slightly transparent background around total price and Request button */
+    .price-section {
+      background-color: rgba(255, 255, 255, 0.05); /* Slightly transparent white */
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
     .price {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 20px;
     }
 
     .price button {
@@ -205,7 +213,7 @@
 </head>
 <body>
   <div class="card">
-    <h2>Promotion</h2>
+    <h2>Promotion calculator</h2>
     <p>
       Estimated new customers =
       <span id="estimate">5 - 10</span>
@@ -263,10 +271,12 @@
       </div>
     </div>
 
-    <!-- Campaign Price -->
-    <div class="price">
-      <span id="price">0€</span>
-      <button id="requestBtn">REQUEST</button>
+    <!-- Transparent background section for total price and REQUEST button -->
+    <div class="price-section">
+      <div class="price">
+        <span id="price">0€</span>
+        <button id="requestBtn">REQUEST</button>
+      </div>
     </div>
 
     <!-- Button to reveal/hide additional earnings section -->
