@@ -1,529 +1,520 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <!-- This viewport meta prevents the page from zooming on mobile -->
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
-  />
-  <title>Promotion Setup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <title>Roll'n'Trip</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
 
-  <!-- FIREBASE SCRIPTS -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
-  <style>
-    /* Base styling */
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #2c2f38;
-      color: white;
-    }
-
-    body {
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .card {
-      max-width: 400px;
-      margin: auto;
-      background-color: #1e2029;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .card h2 {
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #a3a3a3;
-    }
-
-    .quantity,
-    .format {
-      display: flex;
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
-      gap: 10px;
-      margin: 15px 0;
-      justify-content: space-between;
-    }
-
-    .quantity button,
-    .format button {
-      background-color: #3b3e4a;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      min-width: 60px; /* Keep a consistent button width */
-      text-align: center;
-    }
-
-    .quantity button.selected,
-    .format button.selected {
-      background-color: #008cba;
-    }
-
-    .format-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .format-item img {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      border-radius: 4px;
-    }
-
-    /* The slightly transparent background around total price and Request button */
-    .price-section {
-      background-color: rgba(255, 255, 255, 0.05); /* Slightly transparent white */
-      border-radius: 4px;
-      padding: 15px;
-      margin-top: 20px;
-    }
-
-    .price {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .price button {
-      background-color: #008cba;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .dropdown {
-      background-color: #3b3e4a;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: background-color 0.2s;
-    }
-
-    .dropdown:hover {
-      background-color: #008cba;
-    }
-
-    .revenue-section {
-      margin-top: 15px;
-      background-color: #3b3e4a;
-      padding: 10px;
-      border-radius: 4px;
-    }
-
-    .revenue-section p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-
-    .revenue-section input {
-      width: 100%;
-      background-color: #1e2029;
-      color: white;
-      border: 1px solid #008cba;
-      border-radius: 4px;
-      padding: 8px;
-      margin-top: 5px;
-      box-sizing: border-box;
-    }
-
-    /* MEDIA QUERIES FOR MOBILE */
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-        /* Make sure body can fill up full screen height too */
-        height: auto;
-        min-height: 100%;
-      }
-
-      .card {
-        width: 100%;
-        margin: 0;
-        border-radius: 0;
-        box-shadow: none;
-        min-height: 100vh; /* Fill the entire phone screen */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        box-sizing: border-box;
-      }
-
-      .card h2 {
-        font-size: 1.2rem;
-      }
-
-      .subtitle {
-        font-size: 12px;
-      }
-
-      /* Ensure buttons remain a consistent width on mobile */
-      .quantity button,
-      .format button {
-        min-width: 60px;
-        padding: 8px;
-      }
-
-      .format-item img {
-        width: 60px;
-        height: 60px;
-      }
-
-      .price button {
-        padding: 8px 12px;
-        font-size: 14px;
-      }
-
-      .dropdown {
-        margin-top: 10px;
-        padding: 6px 12px;
-        font-size: 14px;
-      }
-
-      .revenue-section {
-        padding: 8px;
-      }
-
-      #mealPrice {
-        padding: 6px;
-      }
-    }
-  </style>
+  <!-- Andere -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="https://i.ibb.co/4RNJ4STy/image-6-1.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+  
 </head>
 <body>
-  <div class="card">
-    <h2>Promotion calculator</h2>
-    <p>
-      Estimated new customers =
-      <span id="estimate">5 - 10</span>
-      <select id="timeframe" class="dropdown">
-        <option value="4weeks">within 4 weeks</option>
-        <option value="6weeks">within 6 weeks</option>
-        <option value="8weeks">within 8 weeks</option>
-      </select>
-    </p>
+<header>
+  <nav>
+    <a href="https://rollntrip.com/" class="logo">
+      <img src="https://i.ibb.co/RMG26p5/image-4.png" alt="Roll'n'Trip Logo" />
+    </a>
 
-    <!-- Quantity Section -->
-    <div>
-      <div class="subtitle">Quantity</div>
-      <div class="quantity">
-        <button data-value="1">1</button>
-        <button data-value="2">2</button>
-        <button data-value="3" class="selected">3</button>
-        <button data-value="4">4</button>
-        <button data-value="5">5</button>
-      </div>
+<div class="phone-number white-text">
+  <a href="tel:+33698743339" class="phone-link">☎️ +33 6 98 74 33 39</a>
+</div>
+    
+    <div class="menu-toggle" id="menuToggle">☰</div>
+    
+    <ul class="nav-links" id="navLinks">
+      <li><a href="https://rollntrip.com/de" style="color: #A9FCED;">Session buchen</a></li>
+      <li><a href="https://rollntrip.vercel.app/de/uber-uns">Über uns</a></li>
+      <li><a href="https://rollntrip.vercel.app/de/kontakt">Kontakt</a></li>
+      
+      <!-- Sprachoptionen -->
+      <li class="language-flags">
+        <a href="https://rollntrip.vercel.app/fr" title="Français">🇫🇷</a>
+        <a href="https://rollntrip.com/" title="English">🇬🇧</a>
+        <a href="https://rollntrip.vercel.app/de" title="Deutsch">🇩🇪</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+    
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Buche deine Session</h1>
     </div>
+    <div class="down-arrow">&#x2193;</div>
+  </section>
 
-    <!-- Format Section -->
-    <div>
-      <div class="subtitle">Format</div>
-      <div class="format">
-        <div class="format-item">
-          <img
-            src="https://i.ibb.co/WG2Jbtp/Group-8.png"
-            alt="Post Image"
-          />
-          <button data-format="post">POST</button>
+   <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div class="content-grid">
+        <!-- Left Content -->
+        <div class="content-section">
+          <!-- Description -->
+          <div class="description">
+            Glide over the crystal-clear waters of the Côte d'Azur on an electric surfboard (eFoil). Discover hidden coves and secret beaches that are inaccessible by land.
+          </div>
+
+          <!-- Activity Features -->
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-icon">🕒</div>
+              <div>
+                <div class="feature-title">Duration</div>
+                <div class="feature-text">30-90 minutes</div>
+              </div>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🌍</div>
+              <div>
+                <div class="feature-title">Languages</div>
+                <div class="feature-text">French, English, German</div>
+              </div>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🚐</div>
+              <div>
+                <div class="feature-title">We bring boards</div>
+                <div class="feature-text">To your location</div>
+              </div>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">👥</div>
+              <div>
+                <div class="feature-title">Group size</div>
+                <div class="feature-text">Max. 6 people</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Highlights -->
+          <div class="card">
+            <h2>Highlights</h2>
+            <ul class="highlight-list">
+              <li class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Feel the thrill of gliding over the water on an electric surfboard</span>
+              </li>
+              <li class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Discover the hidden beauty of the Calanques from a unique sea perspective</span>
+              </li>
+              <li class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Explore secluded coves and secret beaches that are inaccessible by land</span>
+              </li>
+              <li class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Learn the basics of electric surfing from a local guide and practice at your own pace</span>
+              </li>
+              <li class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Capture every unforgettable moment with professional photos and videos</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Full Description -->
+          <div class="card">
+            <h2>Full description</h2>
+            <div class="description-content">
+              <p>
+                Escape the busy streets of Saint Tropez, Port Grimaud or even Fréjus and start foiling (surfing) effortlessly along the stunning Mediterranean coastline on a quiet, eco-friendly electric surfboard, guided by a local expert, and reach secluded coves and secret beaches that are inaccessible by land.
+              </p>
+              <div id="fullDescription" class="hidden">
+                <p>
+                  Your adventure begins with a comprehensive safety briefing and equipment introduction. Our certified instructors will teach you the fundamentals of eFoil operation, ensuring you feel confident before entering the water. The electric surfboard technology allows riders of all skill levels to experience the sensation of flying above the water.
+                </p>
+                <p>
+                  As you glide across the pristine waters of the French Riviera, you'll discover hidden gems along the coastline that are only accessible by sea. The silent electric motor ensures minimal environmental impact while maximizing your connection with nature.
+                </p>
+              </div>
+              <button class="see-more-btn" onclick="toggleDescription()">
+                <span id="toggleText">See more</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- What's Included -->
+          <div class="card">
+            <h2>What's included</h2>
+            <div class="highlight-list">
+              <div class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Photos and videos</span>
+              </div>
+              <div class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Safety briefing</span>
+              </div>
+              <div class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Practice ride time (eFoil)</span>
+              </div>
+              <div class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Calanques Explorations by Sea</span>
+              </div>
+              <div class="highlight-item">
+                <div class="check-icon">✓</div>
+                <span class="item-text">Guide</span>
+              </div>
+              <div class="highlight-item">
+                <div class="x-icon">✗</div>
+                <span class="item-text">Hotel pickup and drop-off (available on request)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Not Suitable For -->
+          <div class="card">
+            <h2>
+              <span class="card-icon red">⚠️</span>
+              Not suitable for
+            </h2>
+            <div class="highlight-list">
+              <div class="highlight-item">
+                <div class="x-icon">✗</div>
+                <span class="item-text">Children under 12 years</span>
+              </div>
+              <div class="highlight-item">
+                <div class="x-icon">✗</div>
+                <span class="item-text">Pregnant women</span>
+              </div>
+              <div class="highlight-item">
+                <div class="x-icon">✗</div>
+                <span class="item-text">People with heart problems</span>
+              </div>
+              <div class="highlight-item">
+                <div class="x-icon">✗</div>
+                <span class="item-text">Non-swimmers</span>
+              </div>
+              <div class="highlight-item">
+                <div class="x-icon">✗</div>
+                <span class="item-text">People prone to seasickness</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Important Information -->
+          <div class="card">
+            <h2>Important information</h2>
+            <div>
+              <h3 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">What to bring</h3>
+              <div class="bring-list">
+                <div class="bring-item">
+                  <div class="bullet"></div>
+                  <span class="item-text">Swimwear</span>
+                </div>
+                <div class="bring-item">
+                  <div class="bullet"></div>
+                  <span class="item-text">Towel</span>
+                </div>
+                <div class="bring-item">
+                  <div class="bullet"></div>
+                  <span class="item-text">Snacks</span>
+                </div>
+                <div class="bring-item">
+                  <div class="bullet"></div>
+                  <span class="item-text">Sunscreen</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="format-item">
-          <img
-            src="https://i.ibb.co/BKJvnvn/Group-10.png"
-            alt="Story Image"
-          />
-          <button data-format="story">STORY</button>
-        </div>
-        <div class="format-item">
-          <img
-            src="https://i.ibb.co/B4bS0HZ/Group-11.png"
-            alt="Reels Image"
-          />
-          <button data-format="reels">REELS</button>
-        </div>
-        <div class="format-item">
-          <img
-            src="https://i.ibb.co/CP6RCQ2/Group-12.png"
-            alt="All Image"
-          />
-          <button data-format="all">ALL</button>
-        </div>
-      </div>
+
+      <!-- ▸▸ DEFERRED IMAGE STRIP ▸▸ -->
+<div id="imageStripPlaceholder"
+     style="height:clamp(104px,12.5vw,144px)"></div>
+
+<template id="imageStripTpl">
+  <section class="image-strip" aria-label="Sample sessions">
+    <div class="strip-inner">
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/Fliteboard-Flitecell-Nano-Lifestyle.webp" alt="Taking off"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/efoil-surfing.webp" alt="E-foil carving"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/FliteBoard_D2_3276-scaled.jpg.webp"  alt="E-foil carving"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/flite_5_2048x2048.webp" alt="Cruising"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/2-5.webp" alt="E-foil carving"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/145.webp" alt="Cruising"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/145 (1).webp" alt="Taking off"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/qlum4zzx6qhprdx58avvsnmo4hvh70gf.webp" alt="E-foil carving"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/Flite_AIR_Evolving_to_PRO_blog_image_5.webp" alt="Cruising"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/-processed.webp" alt="Cruising"></figure> 
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/Fliteboard.webp" alt="Cruising"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/eFoil-Riders-Rental-Fliteboard.webp"  alt="E-foil carving"></figure>
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/fliteboard-rental-1-1024x683.webp" alt="Taking off"></figure>  
+      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/572cea9664ff49d3267b5b0a5a6d19ab6f4fc1ce.webp" alt="Cruising"></figure>
     </div>
+  </section>
+</template>
+  
+ <!-- eFoil Booking Section (Clean + Integrated) -->
+<section class="session-booking" style="padding: 3rem 1rem; max-width: 600px; margin: 0 auto;">
+  <h2 class="booking-title">Wir kommen zu euch!</h2>
 
-    <!-- Transparent background section for total price and REQUEST button -->
-    <div class="price-section">
-      <div class="price">
-        <span id="price">0€</span>
-        <button id="requestBtn">REQUEST</button>
-      </div>
-    </div>
+<div class="form-group">
+  <label for="city">Sag uns, wo</label>
+  <select id="city" class="booking-input" onchange="populateBeaches()">
+    <option value="" disabled selected>Stadt auswählen</option>
+    <option value="frejus">Fréjus</option>
+    <option value="saint-raphael">Saint-Raphaël</option>
+    <option value="les-issambres">Les Issambres</option>
+    <option value="sainte-maxime">Sainte-Maxime</option>
+    <option value="saint-tropez">Saint-Tropez</option>
+    <option value="gassin">Gassin</option>
+    <option value="grimaud">Grimaud</option>
+    <option value="la-croix-valmer">La Croix-Valmer</option>
+    <option value="cavalaire">Cavalaire-sur-Mer</option>
+  </select>
+</div>
 
-    <!-- Button to reveal/hide additional earnings section -->
-    <button id="toggleRevenue" class="dropdown">Show potential returns ▾</button>
+<div class="form-group" id="beachContainer" style="display: none;">
+  <label for="beach">Treffpunkt am Strand</label>
+  <select id="beach" class="booking-input">
+    <option value="" disabled selected>Strand auswählen</option>
+  </select>
+</div>
 
-    <!-- Earnings Calculation Section (hidden by default) -->
-    <div class="revenue-section" id="revenueSection" style="display: none;">
-      <div class="subtitle"></div>
-      <p>Enter your average meal price:</p>
-      <input
-        type="number"
-        id="mealPrice"
-        placeholder="e.g. 25€"
-        min="0"
-        step="1"
-      />
-      <p id="revenueOutput" style="margin-top: 10px;">
-        You will see your potential net amount here.
-      </p>
-    </div>
+  <div class="form-group">
+    <label for="duration">Dauer der eFoil-Session</label>
+    <select id="duration" class="booking-input" onchange="updatePrice()">
+      <option value="30">30 min</option>
+      <option value="60">60 min</option>
+      <option value="90">90 min</option>
+       <option value="10">10 min - Probeangebot</option>
+    </select>
   </div>
 
-  <script>
-    // -----------------------
-    // 1. Firebase Config
-    // -----------------------
-    const firebaseConfig = {
-      apiKey: "AIzaSyBpqSiyQ83SdRRm-oj_8lkh29Zlc3irO7k",
-      authDomain: "proms-2951f.firebaseapp.com",
-      projectId: "proms-2951f",
-      storageBucket: "proms-2951f.firebasestorage.app",
-      messagingSenderId: "155057462048",
-      appId: "1:155057462048:web:61f5e6dc1e621a7abf1545",
-      measurementId: "G-JLZ0ZHM268"
-    };
+  <div class="price-display" id="price">€79 pro Person - Max. 6 Personen</div>
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+<button class="book-button" onclick="showCalendly()">Termin buchen (Kostenlos)</button>
+<div id="calendly-container" style="margin-top: 2rem; display: none;">
+  <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
+</div>
 
-    // Get a Firestore instance
-    const db = firebase.firestore();
+</section>
 
-    // -----------------------
-    // 2. Modified Timeframes
-    // -----------------------
-    const timeframes = {
-      "4weeks": 1,   // within 4 weeks
-      "6weeks": 1.5, // within 6 weeks
-      "8weeks": 2,   // within 8 weeks
-    };
+<style>
+  .booking-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(to right, #000, #777);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-    // -- PRICE PER FORMAT --
-    const pricePerFormat = {
-      post: 50,
-      story: 70,
-      reels: 90,
-      all: 190,
-    };
+  .form-group {
+    margin-bottom: 1.8rem;
+    font-family: 'Sora', sans-serif;
+  }
 
-    // -- ESTIMATE PER FORMAT [MIN, MAX] --
-    const estimatePerFormat = {
-      post: [5, 10],
-      story: [7, 15],
-      reels: [10, 20],
-      all: [22, 45],
-    };
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #000;
+  }
 
-    // -----------------------
-    // Global Variables
-    // -----------------------
-    let currentPrice = 0; // Will store the user's total price
+  .booking-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-family: 'Sora', sans-serif;
+    background-color: #fff;
+    transition: border-color 0.2s ease;
+  }
 
-    // -- ELEMENTS --
-    const quantityButtons = document.querySelectorAll(".quantity button");
-    const formatButtons = document.querySelectorAll(".format button");
-    const estimateDisplay = document.getElementById("estimate");
-    const priceDisplay = document.getElementById("price");
-    const timeframeDropdown = document.getElementById("timeframe");
-    const mealPriceInput = document.getElementById("mealPrice");
-    const revenueOutput = document.getElementById("revenueOutput");
+  .booking-input:focus {
+    outline: none;
+    border-color: #000;
+  }
 
-    const toggleRevenueBtn = document.getElementById("toggleRevenue");
-    const revenueSection = document.getElementById("revenueSection");
-    const requestBtn = document.getElementById("requestBtn");
+  .price-display {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(to right, #000, #777);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Sora', sans-serif;
+  }
 
-    // -- STATE --
-    let selectedQuantity = 3;
-    let selectedFormats = [];
-    let selectedTimeframe = "4weeks";
+  .book-button {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(to right, #000, #777);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    transition: background 0.3s ease;
+  }
 
-    // -- Toggle the Additional Earnings Section --
-    toggleRevenueBtn.addEventListener("click", () => {
-      if (revenueSection.style.display === "none") {
-        revenueSection.style.display = "block";
-        toggleRevenueBtn.textContent = "🧮";
-      } else {
-        revenueSection.style.display = "none";
-        toggleRevenueBtn.textContent = "Show potential returns ▾";
-      }
-    });
+  .book-button:hover {
+    background: #000;
+  }
 
-    // -- UPDATE UI FUNCTION --
-    function updateUI() {
-      const timeframeMultiplier = timeframes[selectedTimeframe];
-      let minEstimate = 0;
-      let maxEstimate = 0;
-      let totalPrice = 0;
-
-      // Sum up estimates & cost for all selected formats
-      selectedFormats.forEach((format) => {
-        const [minE, maxE] = estimatePerFormat[format];
-        minEstimate += minE * selectedQuantity * timeframeMultiplier;
-        maxEstimate += maxE * selectedQuantity * timeframeMultiplier;
-        totalPrice += pricePerFormat[format] * selectedQuantity;
-      });
-
-      // If no format is selected, show 0 - 0
-      if (selectedFormats.length === 0) {
-        estimateDisplay.textContent = "0 - 0";
-        priceDisplay.textContent = "0€";
-        currentPrice = 0;
-      } else {
-        estimateDisplay.textContent = `${minEstimate} - ${maxEstimate}`;
-        priceDisplay.textContent = `${totalPrice}€`;
-        currentPrice = totalPrice; // store the total price
-      }
-
-      // -- Gross revenue logic --
-      const mealPriceValue = parseInt(mealPriceInput.value, 10);
-      if (
-        revenueSection.style.display === "block" && 
-        selectedFormats.length > 0 &&
-        !isNaN(mealPriceValue) &&
-        mealPriceValue > 0
-      ) {
-        const minIncome = mealPriceValue * minEstimate;
-        const maxIncome = mealPriceValue * maxEstimate;
-
-        // Extract the numeric part of the timeframe (e.g. "4" from "4weeks")
-        const weeks = selectedTimeframe.replace("weeks", "");
-
-        if (totalPrice > 0) {
-          revenueOutput.textContent =
-            `Within ${weeks} weeks, you should earn between ${minIncome.toFixed(0)}€ ` +
-            `and ${maxIncome.toFixed(0)}€ due to our collaboration.`;
-        } else {
-          revenueOutput.textContent =
-            "There is no campaign cost. No calculation needed.";
-        }
-      } else if (selectedFormats.length === 0) {
-        revenueOutput.textContent =
-          "Please select at least one format to see your return.";
-      } else {
-        revenueOutput.textContent =
-          "Enter a positive average meal price to see your return";
-      }
+  @media (max-width: 480px) {
+    .session-booking {
+      padding: 2rem 1rem;
     }
 
-    // -- QUANTITY BUTTONS --
-    quantityButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        quantityButtons.forEach((b) => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        selectedQuantity = parseInt(btn.getAttribute("data-value"), 10);
-        updateUI();
+    .booking-title {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  function updatePrice() {
+    const duration = document.getElementById("duration").value;
+    const priceElement = document.getElementById("price");
+    const pricing = {
+      "10": 10,
+      "30": 79,
+      "60": 159,
+      "90": 219
+    };
+    priceElement.textContent = `€${pricing[duration]}`;
+
+    // Hide Calendly embed and clear widget when duration is changed
+    const calendlyContainer = document.getElementById("calendly-container");
+    const calendlyWidget = document.getElementById("calendly-inline-widget");
+
+    calendlyContainer.style.display = "none";
+    calendlyWidget.innerHTML = "";
+  }
+</script>
+
+  
+   <!-- FOOTER -->
+<footer>
+  &copy; 2025 RollnTrip - 
+  <a href="tel:+33698743339" class="phone-link">☎️ +33 6 98 74 33 39</a>
+</footer>
+
+  
+  <!-- Calendly Widget Script -->
+  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  
+<script>
+  function showCalendly() {
+    const container = document.getElementById("calendly-container");
+    const widget = document.getElementById("calendly-inline-widget");
+    const duration = document.getElementById("duration").value;
+
+    // Define URLs based on duration
+    const calendlyURLs = {
+      "10": "https://calendly.com/booking-rollntrip/efoil10?hide_gdpr_banner=1&primary_color=000000",
+      "30": "https://calendly.com/booking-rollntrip/efoil30?hide_gdpr_banner=1&primary_color=000000",
+      "60": "https://calendly.com/booking-rollntrip/efoil60?hide_gdpr_banner=1&primary_color=000000",
+      "90": "https://calendly.com/booking-rollntrip/efoil90?hide_gdpr_banner=1&primary_color=000000"
+    };
+
+    const selectedURL = calendlyURLs[duration] || calendlyURLs["30"]; // Fallback to 30min if nothing selected
+
+    // Clear and reset widget
+    widget.innerHTML = "";
+
+    Calendly.initInlineWidget({
+      url: selectedURL,
+      parentElement: widget
+    });
+
+    container.style.display = "block";
+    container.scrollIntoView({ behavior: "smooth" });
+  }
+</script>
+
+<script>
+  const beachOptions = {
+    "frejus": ["Plage de Fréjus", "Plage de Saint-Aygulf"],
+    "saint-raphael": ["Plage du Veillat", "Plage de la Baumette", "Calanque du Petit Caneiret"],
+    "les-issambres": ["Plage de la Gaillarde", "Plage de San Peïre", "Calanque de Tardieu"],
+    "sainte-maxime": ["Plage de la Croisette", "Plage des Éléphants", "Plage de la Nartelle"],
+    "saint-tropez": ["Plage de Pampelonne", "Plage des Salins", "Plage de la Bouillabaisse"],
+    "gassin": ["Plage du Treizain", "Plage de la Moune", "Plage de Bertaud-Marines"],
+    "grimaud": ["Plage de Port Grimaud", "Plage des Cigales", "Plage de Saint-Pons-les-Mûres"],
+    "la-croix-valmer": ["Plage du Débarquement", "Plage de Gigaro", "Plage de Sylvabelle"],
+    "cavalaire": ["Plage du Centre-Ville", "Plage de Pardigon", "Plage de Bonporteau"]
+  };
+
+  function populateBeaches() {
+    const city = document.getElementById("city").value;
+    const beachSelect = document.getElementById("beach");
+    const beachContainer = document.getElementById("beachContainer");
+
+    // Reset beach options
+    beachSelect.innerHTML = `<option value="" disabled selected>Select a beach</option>`;
+
+    if (beachOptions[city]) {
+      beachOptions[city].forEach(beach => {
+        const option = document.createElement("option");
+        option.value = beach;
+        option.textContent = beach;
+        beachSelect.appendChild(option);
       });
-    });
 
-    // -- FORMAT BUTTONS (multi-select) + "ALL" logic --
-    formatButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const format = button.getAttribute("data-format");
-
-        if (format === "all") {
-          if (selectedFormats.includes("all")) {
-            selectedFormats = selectedFormats.filter((f) => f !== "all");
-            button.classList.remove("selected");
-          } else {
-            selectedFormats = ["all"];
-            formatButtons.forEach((btn) => btn.classList.remove("selected"));
-            button.classList.add("selected");
-          }
-        } else {
-          // If "all" is currently selected, remove it before toggling other formats
-          if (selectedFormats.includes("all")) {
-            selectedFormats = selectedFormats.filter((f) => f !== "all");
-            const allBtn = document.querySelector('button[data-format="all"]');
-            allBtn.classList.remove("selected");
-          }
-          if (selectedFormats.includes(format)) {
-            selectedFormats = selectedFormats.filter((f) => f !== format);
-            button.classList.remove("selected");
-          } else {
-            selectedFormats.push(format);
-            button.classList.add("selected");
-          }
-        }
-
-        updateUI();
-      });
-    });
-
-    // -- TIMEFRAME DROPDOWN --
-    timeframeDropdown.addEventListener("change", () => {
-      selectedTimeframe = timeframeDropdown.value;
-      updateUI();
-    });
-
-    // -- AVERAGE MEAL PRICE INPUT --
-    mealPriceInput.addEventListener("input", () => {
-      updateUI();
-    });
-
-    // -- INITIALIZE UI --
-    updateUI();
-
-    // -----------------------
-    // 3. Save Data to Firestore
-    // -----------------------
-    requestBtn.addEventListener("click", () => {
-      // Prompt the user for their email
-      const userEmail = prompt("Please enter your email address:");
-      if (!userEmail) return; // If user canceled or left empty, do nothing.
-
-      // Gather data we want to store
-      const dataToSave = {
-        quantity: selectedQuantity,
-        formats: selectedFormats,
-        timeframe: selectedTimeframe,
-        mealPrice: parseInt(mealPriceInput.value, 10) || 0,
-        totalPrice: currentPrice, // store the total cost
-        createdAt: new Date().toISOString(), // or use serverTimestamp if desired
-      };
-
-      // Use doc(userEmail) to create (or overwrite) a doc named by the email
-      db.collection("promotions")
-        .doc(userEmail)
-        .set(dataToSave)
-        .then(() => {
-          alert(`Request saved under email: ${userEmail}`);
-        })
-        .catch((error) => {
-          console.error("Error adding document: ", error);
-        });
+      // Show beach selection
+      beachContainer.style.display = "block";
+    } else {
+      beachContainer.style.display = "none";
+    }
+  }
+</script>
+  
+  
+  <script>
+    document.getElementById("menuToggle").addEventListener("click", function() {
+      document.getElementById("navLinks").classList.toggle("active");
     });
   </script>
+  
+  <script>
+/* lazy-insert the strip when it’s ~200 px away */
+window.addEventListener('load', () => {
+  const ph  = document.getElementById('imageStripPlaceholder');
+  const tpl = document.getElementById('imageStripTpl');
+
+  const io = new IntersectionObserver(entries => {
+    if (!entries[0].isIntersecting) return;
+
+    /* 1 | inject the real HTML */
+    ph.replaceWith(tpl.content.cloneNode(true));
+
+    /* 2 | swap data-src → src so images start downloading (low priority) */
+    document.querySelectorAll('.image-strip img').forEach(img => {
+      img.loading       = 'lazy';
+      img.decoding      = 'async';
+      img.fetchPriority = 'low';   // Chrome 115+; ignored elsewhere
+      img.src           = img.dataset.src;
+    });
+
+    io.disconnect();               // clean-up
+  }, { rootMargin: '200px' });     // preload a little before it appears
+
+  io.observe(ph);
+});
+</script>
+  
 </body>
 </html>
