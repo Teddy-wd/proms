@@ -1,48 +1,45 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000000" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
   <title>Roll'n'Trip</title>
-  
+
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
 
-  <!-- Andere -->
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon & Fonts -->
   <link rel="icon" href="https://i.ibb.co/4RNJ4STy/image-6-1.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
-  
 </head>
 <body>
-<header>
-  <nav>
-    <a href="https://rollntrip.com/" class="logo">
-      <img src="https://i.ibb.co/RMG26p5/image-4.png" alt="Roll'n'Trip Logo" />
-    </a>
+  <header>
+    <nav>
+      <a href="https://rollntrip.com/" class="logo">
+        <img src="https://i.ibb.co/RMG26p5/image-4.png" alt="Roll'n'Trip Logo">
+      </a>
+      <div class="phone-number">
+        <a href="tel:+33698743339" class="phone-link">☎️ +33 6 98 74 33 39</a>
+      </div>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="https://rollntrip.com/de" class="active">Session buchen</a></li>
+        <li><a href="https://rollntrip.vercel.app/de/uber-uns">Über uns</a></li>
+        <li><a href="https://rollntrip.vercel.app/de/kontakt">Kontakt</a></li>
+        <li class="language-flags">
+          <a href="https://rollntrip.vercel.app/fr" title="Français">🇫🇷</a>
+          <a href="https://rollntrip.com/" title="English">🇬🇧</a>
+          <a href="https://rollntrip.vercel.app/de" title="Deutsch">🇩🇪</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
 
-<div class="phone-number white-text">
-  <a href="tel:+33698743339" class="phone-link">☎️ +33 6 98 74 33 39</a>
-</div>
-    
-    <div class="menu-toggle" id="menuToggle">☰</div>
-    
-    <ul class="nav-links" id="navLinks">
-      <li><a href="https://rollntrip.com/de" style="color: #A9FCED;">Session buchen</a></li>
-      <li><a href="https://rollntrip.vercel.app/de/uber-uns">Über uns</a></li>
-      <li><a href="https://rollntrip.vercel.app/de/kontakt">Kontakt</a></li>
-      
-      <!-- Sprachoptionen -->
-      <li class="language-flags">
-        <a href="https://rollntrip.vercel.app/fr" title="Français">🇫🇷</a>
-        <a href="https://rollntrip.com/" title="English">🇬🇧</a>
-        <a href="https://rollntrip.vercel.app/de" title="Deutsch">🇩🇪</a>
-      </li>
-    </ul>
-  </nav>
-</header>
-    
   <section class="hero">
     <div class="hero-content">
       <h1>Buche deine Session</h1>
@@ -50,11 +47,9 @@
     <div class="down-arrow">&#x2193;</div>
   </section>
 
-   <!-- Main Content -->
   <main class="main-content">
     <div class="container">
       <div class="content-grid">
-        <!-- Left Content -->
         <div class="content-section">
           <!-- Description -->
           <div class="description">
@@ -70,7 +65,6 @@
                 <div class="feature-text">30-90 minutes</div>
               </div>
             </div>
-            
             <div class="feature-item">
               <div class="feature-icon">🌍</div>
               <div>
@@ -78,7 +72,6 @@
                 <div class="feature-text">French, English, German</div>
               </div>
             </div>
-            
             <div class="feature-item">
               <div class="feature-icon">🚐</div>
               <div>
@@ -86,7 +79,6 @@
                 <div class="feature-text">To your location</div>
               </div>
             </div>
-            
             <div class="feature-item">
               <div class="feature-icon">👥</div>
               <div>
@@ -147,374 +139,147 @@
           <!-- What's Included -->
           <div class="card">
             <h2>What's included</h2>
-            <div class="highlight-list">
-              <div class="highlight-item">
-                <div class="check-icon">✓</div>
-                <span class="item-text">Photos and videos</span>
-              </div>
-              <div class="highlight-item">
-                <div class="check-icon">✓</div>
-                <span class="item-text">Safety briefing</span>
-              </div>
-              <div class="highlight-item">
-                <div class="check-icon">✓</div>
-                <span class="item-text">Practice ride time (eFoil)</span>
-              </div>
-              <div class="highlight-item">
-                <div class="check-icon">✓</div>
-                <span class="item-text">Calanques Explorations by Sea</span>
-              </div>
-              <div class="highlight-item">
-                <div class="check-icon">✓</div>
-                <span class="item-text">Guide</span>
-              </div>
-              <div class="highlight-item">
-                <div class="x-icon">✗</div>
-                <span class="item-text">Hotel pickup and drop-off (available on request)</span>
-              </div>
-            </div>
+            <ul class="highlight-list">
+              <li class="highlight-item"><div class="check-icon">✓</div><span class="item-text">Photos and videos</span></li>
+              <li class="highlight-item"><div class="check-icon">✓</div><span class="item-text">Safety briefing</span></li>
+              <li class="highlight-item"><div class="check-icon">✓</div><span class="item-text">Practice ride time (eFoil)</span></li>
+              <li class="highlight-item"><div class="check-icon">✓</div><span class="item-text">Calanques explorations by sea</span></li>
+              <li class="highlight-item"><div class="check-icon">✓</div><span class="item-text">Guide</span></li>
+              <li class="highlight-item"><div class="x-icon">✗</div><span class="item-text">Hotel pickup and drop-off (on request)</span></li>
+            </ul>
           </div>
 
           <!-- Not Suitable For -->
           <div class="card">
-            <h2>
-              <span class="card-icon red">⚠️</span>
-              Not suitable for
-            </h2>
-            <div class="highlight-list">
-              <div class="highlight-item">
-                <div class="x-icon">✗</div>
-                <span class="item-text">Children under 12 years</span>
-              </div>
-              <div class="highlight-item">
-                <div class="x-icon">✗</div>
-                <span class="item-text">Pregnant women</span>
-              </div>
-              <div class="highlight-item">
-                <div class="x-icon">✗</div>
-                <span class="item-text">People with heart problems</span>
-              </div>
-              <div class="highlight-item">
-                <div class="x-icon">✗</div>
-                <span class="item-text">Non-swimmers</span>
-              </div>
-              <div class="highlight-item">
-                <div class="x-icon">✗</div>
-                <span class="item-text">People prone to seasickness</span>
-              </div>
-            </div>
+            <h2><span class="card-icon red">⚠️</span>Not suitable for</h2>
+            <ul class="highlight-list">
+              <li class="highlight-item"><div class="x-icon">✗</div><span class="item-text">Children under 12 years</span></li>
+              <li class="highlight-item"><div class="x-icon">✗</div><span class="item-text">Pregnant women</span></li>
+              <li class="highlight-item"><div class="x-icon">✗</div><span class="item-text">People with heart problems</span></li>
+              <li class="highlight-item"><div class="x-icon">✗</div><span class="item-text">Non-swimmers</span></li>
+              <li class="highlight-item"><div class="x-icon">✗</div><span class="item-text">People prone to seasickness</span></li>
+            </ul>
           </div>
 
           <!-- Important Information -->
           <div class="card">
             <h2>Important information</h2>
-            <div>
-              <h3 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">What to bring</h3>
-              <div class="bring-list">
-                <div class="bring-item">
-                  <div class="bullet"></div>
-                  <span class="item-text">Swimwear</span>
-                </div>
-                <div class="bring-item">
-                  <div class="bullet"></div>
-                  <span class="item-text">Towel</span>
-                </div>
-                <div class="bring-item">
-                  <div class="bullet"></div>
-                  <span class="item-text">Snacks</span>
-                </div>
-                <div class="bring-item">
-                  <div class="bullet"></div>
-                  <span class="item-text">Sunscreen</span>
-                </div>
-              </div>
-            </div>
+            <h3>What to bring</h3>
+            <ul class="bring-list">
+              <li class="bring-item"><div class="bullet"></div><span class="item-text">Swimwear</span></li>
+              <li class="bring-item"><div class="bullet"></div><span class="item-text">Towel</span></li>
+              <li class="bring-item"><div class="bullet"></div><span class="item-text">Snacks</span></li>
+              <li class="bring-item"><div class="bullet"></div><span class="item-text">Sunscreen</span></li>
+            </ul>
           </div>
         </div>
+      </div>
+    </div>
+  </main>
 
-      <!-- ▸▸ DEFERRED IMAGE STRIP ▸▸ -->
-<div id="imageStripPlaceholder"
-     style="height:clamp(104px,12.5vw,144px)"></div>
+  <!-- Deferred Image Strip -->
+  <div id="imageStripPlaceholder" style="height:clamp(104px,12.5vw,144px)"></div>
+  <template id="imageStripTpl">
+    <section class="image-strip" aria-label="Sample sessions">
+      <div class="strip-inner">
+        <!-- repeated .tile <figure> elements here -->
+      </div>
+    </section>
+  </template>
 
-<template id="imageStripTpl">
-  <section class="image-strip" aria-label="Sample sessions">
-    <div class="strip-inner">
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/Fliteboard-Flitecell-Nano-Lifestyle.webp" alt="Taking off"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/efoil-surfing.webp" alt="E-foil carving"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/FliteBoard_D2_3276-scaled.jpg.webp"  alt="E-foil carving"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/flite_5_2048x2048.webp" alt="Cruising"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/2-5.webp" alt="E-foil carving"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/145.webp" alt="Cruising"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/145 (1).webp" alt="Taking off"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/qlum4zzx6qhprdx58avvsnmo4hvh70gf.webp" alt="E-foil carving"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/Flite_AIR_Evolving_to_PRO_blog_image_5.webp" alt="Cruising"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/-processed.webp" alt="Cruising"></figure> 
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/Fliteboard.webp" alt="Cruising"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/eFoil-Riders-Rental-Fliteboard.webp"  alt="E-foil carving"></figure>
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/fliteboard-rental-1-1024x683.webp" alt="Taking off"></figure>  
-      <figure class="tile"><img data-src="https://cdn.jsdelivr.net/gh/Teddy-wd/proms/572cea9664ff49d3267b5b0a5a6d19ab6f4fc1ce.webp" alt="Cruising"></figure>
+  <!-- Booking Section -->
+  <section class="session-booking">
+    <h2 class="booking-title">Wir kommen zu euch!</h2>
+    <div class="form-group">
+      <label for="city">Sag uns, wo</label>
+      <select id="city" class="booking-input" onchange="populateBeaches()">
+        <option value="" disabled selected>Stadt auswählen</option>
+        <!-- options... -->
+      </select>
+    </div>
+    <div class="form-group" id="beachContainer" style="display:none;">
+      <label for="beach">Treffpunkt am Strand</label>
+      <select id="beach" class="booking-input">
+        <option value="" disabled selected>Strand auswählen</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="duration">Dauer der eFoil-Session</label>
+      <select id="duration" class="booking-input" onchange="updatePrice()">
+        <option value="30">30 min</option>
+        <option value="60">60 min</option>
+        <option value="90">90 min</option>
+        <option value="10">10 min - Probeangebot</option>
+      </select>
+    </div>
+    <div id="price" class="price-display">€79 pro Person – Max. 6 Personen</div>
+    <button class="book-button" onclick="showCalendly()">Termin buchen (Kostenlos)</button>
+    <div id="calendly-container" style="margin-top:2rem; display:none;">
+      <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
     </div>
   </section>
-</template>
-  
- <!-- eFoil Booking Section (Clean + Integrated) -->
-<section class="session-booking" style="padding: 3rem 1rem; max-width: 600px; margin: 0 auto;">
-  <h2 class="booking-title">Wir kommen zu euch!</h2>
 
-<div class="form-group">
-  <label for="city">Sag uns, wo</label>
-  <select id="city" class="booking-input" onchange="populateBeaches()">
-    <option value="" disabled selected>Stadt auswählen</option>
-    <option value="frejus">Fréjus</option>
-    <option value="saint-raphael">Saint-Raphaël</option>
-    <option value="les-issambres">Les Issambres</option>
-    <option value="sainte-maxime">Sainte-Maxime</option>
-    <option value="saint-tropez">Saint-Tropez</option>
-    <option value="gassin">Gassin</option>
-    <option value="grimaud">Grimaud</option>
-    <option value="la-croix-valmer">La Croix-Valmer</option>
-    <option value="cavalaire">Cavalaire-sur-Mer</option>
-  </select>
-</div>
+  <footer>
+    &copy; 2025 RollnTrip – <a href="tel:+33698743339" class="phone-link">☎️ +33 6 98 74 33 39</a>
+  </footer>
 
-<div class="form-group" id="beachContainer" style="display: none;">
-  <label for="beach">Treffpunkt am Strand</label>
-  <select id="beach" class="booking-input">
-    <option value="" disabled selected>Strand auswählen</option>
-  </select>
-</div>
-
-  <div class="form-group">
-    <label for="duration">Dauer der eFoil-Session</label>
-    <select id="duration" class="booking-input" onchange="updatePrice()">
-      <option value="30">30 min</option>
-      <option value="60">60 min</option>
-      <option value="90">90 min</option>
-       <option value="10">10 min - Probeangebot</option>
-    </select>
-  </div>
-
-  <div class="price-display" id="price">€79 pro Person - Max. 6 Personen</div>
-
-<button class="book-button" onclick="showCalendly()">Termin buchen (Kostenlos)</button>
-<div id="calendly-container" style="margin-top: 2rem; display: none;">
-  <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
-</div>
-
-</section>
-
-<style>
-  .booking-title {
-    font-family: 'Sora', sans-serif;
-    font-size: 1.8rem;
-    text-align: center;
-    margin-bottom: 2rem;
-    background: linear-gradient(to right, #000, #777);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .form-group {
-    margin-bottom: 1.8rem;
-    font-family: 'Sora', sans-serif;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    font-size: 1rem;
-    color: #000;
-  }
-
-  .booking-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    font-family: 'Sora', sans-serif;
-    background-color: #fff;
-    transition: border-color 0.2s ease;
-  }
-
-  .booking-input:focus {
-    outline: none;
-    border-color: #000;
-  }
-
-  .price-display {
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-    background: linear-gradient(to right, #000, #777);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-family: 'Sora', sans-serif;
-  }
-
-  .book-button {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-    background: linear-gradient(to right, #000, #777);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-family: 'Sora', sans-serif;
-    transition: background 0.3s ease;
-  }
-
-  .book-button:hover {
-    background: #000;
-  }
-
-  @media (max-width: 480px) {
-    .session-booking {
-      padding: 2rem 1rem;
-    }
-
-    .booking-title {
-      font-size: 1.5rem;
-    }
-  }
-</style>
-
-<script>
-  function updatePrice() {
-    const duration = document.getElementById("duration").value;
-    const priceElement = document.getElementById("price");
-    const pricing = {
-      "10": 10,
-      "30": 79,
-      "60": 159,
-      "90": 219
-    };
-    priceElement.textContent = `€${pricing[duration]}`;
-
-    // Hide Calendly embed and clear widget when duration is changed
-    const calendlyContainer = document.getElementById("calendly-container");
-    const calendlyWidget = document.getElementById("calendly-inline-widget");
-
-    calendlyContainer.style.display = "none";
-    calendlyWidget.innerHTML = "";
-  }
-</script>
-
-  
-   <!-- FOOTER -->
-<footer>
-  &copy; 2025 RollnTrip - 
-  <a href="tel:+33698743339" class="phone-link">☎️ +33 6 98 74 33 39</a>
-</footer>
-
-  
-  <!-- Calendly Widget Script -->
-  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-  
-<script>
-  function showCalendly() {
-    const container = document.getElementById("calendly-container");
-    const widget = document.getElementById("calendly-inline-widget");
-    const duration = document.getElementById("duration").value;
-
-    // Define URLs based on duration
-    const calendlyURLs = {
-      "10": "https://calendly.com/booking-rollntrip/efoil10?hide_gdpr_banner=1&primary_color=000000",
-      "30": "https://calendly.com/booking-rollntrip/efoil30?hide_gdpr_banner=1&primary_color=000000",
-      "60": "https://calendly.com/booking-rollntrip/efoil60?hide_gdpr_banner=1&primary_color=000000",
-      "90": "https://calendly.com/booking-rollntrip/efoil90?hide_gdpr_banner=1&primary_color=000000"
-    };
-
-    const selectedURL = calendlyURLs[duration] || calendlyURLs["30"]; // Fallback to 30min if nothing selected
-
-    // Clear and reset widget
-    widget.innerHTML = "";
-
-    Calendly.initInlineWidget({
-      url: selectedURL,
-      parentElement: widget
-    });
-
-    container.style.display = "block";
-    container.scrollIntoView({ behavior: "smooth" });
-  }
-</script>
-
-<script>
-  const beachOptions = {
-    "frejus": ["Plage de Fréjus", "Plage de Saint-Aygulf"],
-    "saint-raphael": ["Plage du Veillat", "Plage de la Baumette", "Calanque du Petit Caneiret"],
-    "les-issambres": ["Plage de la Gaillarde", "Plage de San Peïre", "Calanque de Tardieu"],
-    "sainte-maxime": ["Plage de la Croisette", "Plage des Éléphants", "Plage de la Nartelle"],
-    "saint-tropez": ["Plage de Pampelonne", "Plage des Salins", "Plage de la Bouillabaisse"],
-    "gassin": ["Plage du Treizain", "Plage de la Moune", "Plage de Bertaud-Marines"],
-    "grimaud": ["Plage de Port Grimaud", "Plage des Cigales", "Plage de Saint-Pons-les-Mûres"],
-    "la-croix-valmer": ["Plage du Débarquement", "Plage de Gigaro", "Plage de Sylvabelle"],
-    "cavalaire": ["Plage du Centre-Ville", "Plage de Pardigon", "Plage de Bonporteau"]
-  };
-
-  function populateBeaches() {
-    const city = document.getElementById("city").value;
-    const beachSelect = document.getElementById("beach");
-    const beachContainer = document.getElementById("beachContainer");
-
-    // Reset beach options
-    beachSelect.innerHTML = `<option value="" disabled selected>Select a beach</option>`;
-
-    if (beachOptions[city]) {
-      beachOptions[city].forEach(beach => {
-        const option = document.createElement("option");
-        option.value = beach;
-        option.textContent = beach;
-        beachSelect.appendChild(option);
-      });
-
-      // Show beach selection
-      beachContainer.style.display = "block";
-    } else {
-      beachContainer.style.display = "none";
-    }
-  }
-</script>
-  
-  
+  <!-- Scripts -->
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
   <script>
-    document.getElementById("menuToggle").addEventListener("click", function() {
-      document.getElementById("navLinks").classList.toggle("active");
+    function toggleDescription() {
+      const full = document.getElementById('fullDescription');
+      const txt = document.getElementById('toggleText');
+      full.classList.toggle('hidden');
+      txt.textContent = full.classList.contains('hidden') ? 'See more' : 'See less';
+    }
+    function updatePrice() {
+      const d = document.getElementById('duration').value;
+      const pricing = { '10':10, '30':79, '60':159, '90':219 };
+      document.getElementById('price').textContent = `€${pricing[d]}`;
+      document.getElementById('calendly-container').style.display = 'none';
+      document.getElementById('calendly-inline-widget').innerHTML = '';
+    }
+    function showCalendly() {
+      const u = document.getElementById('duration').value;
+      const urls = {
+        '10':'https://calendly.com/booking-rollntrip/efoil10?hide_gdpr_banner=1&primary_color=000000',
+        '30':'https://calendly.com/booking-rollntrip/efoil30?hide_gdpr_banner=1&primary_color=000000',
+        '60':'https://calendly.com/booking-rollntrip/efoil60?hide_gdpr_banner=1&primary_color=000000',
+        '90':'https://calendly.com/booking-rollntrip/efoil90?hide_gdpr_banner=1&primary_color=000000'
+      };
+      const widget = document.getElementById('calendly-inline-widget');
+      widget.innerHTML = '';
+      Calendly.initInlineWidget({ url: urls[u] || urls['30'], parentElement: widget });
+      document.getElementById('calendly-container').style.display = 'block';
+    }
+    const beachOptions = {
+      frejus:['Plage de Fréjus','Plage de Saint-Aygulf'], /* … */ cavalaire:['Plage du Centre-Ville','Plage de Pardigon','Plage de Bonporteau']
+    };
+    function populateBeaches() {
+      const city = document.getElementById('city').value;
+      const sel = document.getElementById('beach');
+      sel.innerHTML = '<option value="" disabled selected>Strand auswählen</option>';
+      if(beachOptions[city]){
+        beachOptions[city].forEach(b=>sel.append(new Option(b,b)));
+        document.getElementById('beachContainer').style.display='block';
+      } else {
+        document.getElementById('beachContainer').style.display='none';
+      }
+    }
+    document.getElementById('menuToggle').onclick = ()=>document.getElementById('navLinks').classList.toggle('active');
+    window.addEventListener('load',()=>{
+      const ph = document.getElementById('imageStripPlaceholder'),
+            tpl = document.getElementById('imageStripTpl'),
+            io = new IntersectionObserver(e=>{
+              if(!e[0].isIntersecting) return;
+              ph.replaceWith(tpl.content.cloneNode(true));
+              document.querySelectorAll('.image-strip img').forEach(i=>{
+                i.loading='lazy'; i.decoding='async'; i.fetchPriority='low'; i.src=i.dataset.src;
+              });
+              io.disconnect();
+            },{rootMargin:'200px'});
+      io.observe(ph);
     });
   </script>
-  
-  <script>
-/* lazy-insert the strip when it’s ~200 px away */
-window.addEventListener('load', () => {
-  const ph  = document.getElementById('imageStripPlaceholder');
-  const tpl = document.getElementById('imageStripTpl');
-
-  const io = new IntersectionObserver(entries => {
-    if (!entries[0].isIntersecting) return;
-
-    /* 1 | inject the real HTML */
-    ph.replaceWith(tpl.content.cloneNode(true));
-
-    /* 2 | swap data-src → src so images start downloading (low priority) */
-    document.querySelectorAll('.image-strip img').forEach(img => {
-      img.loading       = 'lazy';
-      img.decoding      = 'async';
-      img.fetchPriority = 'low';   // Chrome 115+; ignored elsewhere
-      img.src           = img.dataset.src;
-    });
-
-    io.disconnect();               // clean-up
-  }, { rootMargin: '200px' });     // preload a little before it appears
-
-  io.observe(ph);
-});
-</script>
-  
 </body>
 </html>
